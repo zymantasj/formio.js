@@ -377,8 +377,13 @@ export default class SelectComponent extends BaseComponent {
       (minSearch > 0) &&
       (!search || (search.length < minSearch))
     ) {
-      // Set empty items.
-      return this.setItems([]);
+      if (this.data[this.key]) {
+        // Set empty items.
+        return this.setItems([]);
+      }
+      else {
+        return this.choices.containerOuter.removeLoadingState(); // hack to hide no choices element
+      }
     }
 
     // Ensure we have a method and remove any body if method is get
@@ -849,7 +854,7 @@ export default class SelectComponent extends BaseComponent {
   }
 
   getValue() {
-    if (this.viewOnly || this.loading || !this.selectOptions.length) {
+    if (this.viewOnly || this.loading || (!this.selectOptions.length && !this.component.lazyLoad)) {
       return this.dataValue;
     }
     let value = '';
@@ -902,9 +907,11 @@ export default class SelectComponent extends BaseComponent {
       return changed;
     }
 
+    var minSearch = parseInt(this.component.minSearch, 10);
     // Determine if we need to perform an initial lazyLoad api call if searchField is provided.
     if (
       this.component.searchField &&
+      minSearch === 0 &&
       this.component.lazyLoad &&
       !this.lazyLoadInit &&
       !this.active &&
@@ -918,7 +925,9 @@ export default class SelectComponent extends BaseComponent {
     }
 
     // Add the value options.
-    this.addValueOptions();
+    if (!(this.component.searchField && minSearch > 0)) {//hack to fix doubled values with minSearch and lazyload
+      this.addValueOptions();
+    }
 
     if (this.choices) {
       // Now set the value.
