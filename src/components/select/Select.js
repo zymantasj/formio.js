@@ -902,9 +902,11 @@ export default class SelectComponent extends BaseComponent {
       return changed;
     }
 
+    var minSearch = parseInt(this.component.minSearch, 10);
     // Determine if we need to perform an initial lazyLoad api call if searchField is provided.
     if (
       this.component.searchField &&
+      minSearch === 0 &&
       this.component.lazyLoad &&
       !this.lazyLoadInit &&
       !this.active &&
@@ -918,7 +920,9 @@ export default class SelectComponent extends BaseComponent {
     }
 
     // Add the value options.
-    this.addValueOptions();
+    if (!(this.component.searchField && minSearch > 0)) {//hack to fix doubled values with minSearch and lazyload
+      this.addValueOptions();
+    }
 
     if (this.choices) {
       // Now set the value.
