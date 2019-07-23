@@ -475,7 +475,7 @@ export default class Component {
       case 'question-sign':
         return 'fa fa-question-circle';
       case 'remove-circle':
-        return 'fa fa-times-circle-o';
+        return 'fa fa-trash';
       case 'new-window':
         return 'fa fa-window-restore';
       case 'menu-hamburger':
