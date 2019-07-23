@@ -377,8 +377,13 @@ export default class SelectComponent extends BaseComponent {
       (minSearch > 0) &&
       (!search || (search.length < minSearch))
     ) {
-      // Set empty items.
-      return this.setItems([]);
+      if (this.data[this.key]) {
+        // Set empty items.
+        return this.setItems([]);
+      }
+      else {
+        return this.choices.containerOuter.removeLoadingState(); // hack to hide no choices element
+      }
     }
 
     // Ensure we have a method and remove any body if method is get
