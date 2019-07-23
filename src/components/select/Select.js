@@ -849,7 +849,7 @@ export default class SelectComponent extends BaseComponent {
   }
 
   getValue() {
-    if (this.viewOnly || this.loading || !this.selectOptions.length) {
+    if (this.viewOnly || this.loading || (!this.selectOptions.length && !this.component.lazyLoad)) {
       return this.dataValue;
     }
     let value = '';
