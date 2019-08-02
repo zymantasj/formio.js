@@ -283,7 +283,7 @@ export default {
         });
       },
       check(component, setting, value) {
-        return (value !== 'Invalid date');
+        return (value instanceof Date && !isNaN(value));
       }
     },
     day: {

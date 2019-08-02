@@ -123,10 +123,21 @@ export default class CalendarWidget extends InputWidget {
       // Enforce the input mask of the format.
       this.setInputMask(this.calendar._input, convertFormatToMask(this.settings.format));
 
+      this.addEventListener(this.calendar._input, 'keydown', (event) => {
+        if (event.keyCode === 13) {
+          event.stopPropagation();
+        }
+      });
+
       // Make sure we commit the value after a blur event occurs.
-      this.addEventListener(this.calendar._input, 'blur', () =>
-        this.calendar.setDate(this.calendar._input.value, true, this.settings.altFormat)
-      );
+      this.addEventListener(this.calendar._input, 'blur', () => {
+        if (new Date(this.calendar._input.value).toString() === 'Invalid Date') {
+          this.calendar.selectedDates = [this.calendar._input.value];
+          this.emit('update');
+          return;
+        }
+        this.calendar.setDate(this.calendar._input.value, true, this.settings.altFormat);
+      });
     }
   }
 
